@@ -3,22 +3,29 @@ import math
 from individual import Individual
 
 class Environment:
-    def __init__(self):
-        self.size = 150
-        self.max_generations = 200
-        self.mutation_rate = 0.01
-        self.sex_rate = 1
-        self.x_range = (0, 9)
-        self.maximize = False
+    def __init__(self, math_function, **kwargs):
+        self.size = kwargs.get('size', 100)
+        self.sex_rate = kwargs.get('sex_rate', 1)
+        self.mutation_rate = kwargs.get('mutation_rate', 0.01)
+        self.max_generations = kwargs.get('max_generations', 200)
+
+        self.math_function = math_function
+        self.maximize = kwargs.get('maximize', False)
+        self.x_range = kwargs.get('x_range', (-1,1))
+        self.y_range = kwargs.get('y_range', (-1,1))
+
+        self.tragetory_x = []
+        self.tragetory_y = []
+        self.tragetory_score = []
 
         self.generation = 0
         self.population = self.create_population()
         self.winner = None
     
     def create_population(self):
-        return [Individual(x_range=self.x_range) for i in range(self.size)]
+        return [Individual(x_range=self.x_range, y_range=self.y_range) for i in range(self.size)]
 
-    def loop(self):
+    def start(self):
         while self.generation < self.max_generations:
             self._fight()
             self.population = self.sort_score(self.population)
@@ -26,9 +33,8 @@ class Environment:
             self._mutate()
             self.winner = self.population[0]
             self._show_info()
-            self.generation += 1 
-        print('x =', self.winner.x)
-        print('y =', self.winner.score)
+            self._set_tragetory()
+            self.generation += 1
 
     def _fight(self):
         for individual in self.population:
@@ -76,13 +82,17 @@ class Environment:
                 pass
                 self.population[i].mutate()
 
+    def _set_tragetory(self):
+        self.tragetory_x.append(self.winner.x)
+        self.tragetory_y.append(self.winner.y)
+        self.tragetory_score.append(self.winner.score)
+
     def _show_info(self):
         print('='*20)
         print(f'Generation: {self.generation}')
         print(f'Result: {self.winner.score}')
         print(f'X: {self.winner.x}')
-        print(f'Chromossome: {str(self.winner.chromossomes)}')
+        print(f'Y: {self.winner.y}')
+        print(f'Chromossome_x: {str(self.winner.chromossome_x)}')
+        print(f'Chromossome_y: {str(self.winner.chromossome_y)}')
         print('='*20)
-
-    def math_function(self, x):
-        return x**2 * math.sin(2*x) + 2*math.cos(5*x) + x
