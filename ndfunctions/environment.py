@@ -8,12 +8,12 @@ class Environment:
         self.variables = variables
         self.ranges = ranges
 
-        self.population_size = kwargs.get('population_size', 100)
+        self.population_size = kwargs.get('population_size', 150)
         self.crossover_rate = kwargs.get('crossover_rate', 1)
         self.mutation_rate = kwargs.get('mutation_rate', 0.01)
         self.max_generations = kwargs.get('max_generations', 200)
         self.mode = kwargs.get('mode', 'Min')
-        self.elite = kwargs.get('elite', 1)
+        self.elitism = kwargs.get('elitism', 2)
 
         self.tragetory_score = []
         self.generation = 0
@@ -48,21 +48,18 @@ class Environment:
     def _massive_crossover(self):
         population = self.population.copy()
         for position, individual in enumerate(self.population):
-            if position < self.elite: continue
+            if position < self.elitism: continue
             other = random.choice(population)
             individual.crossover(other, rate=self.crossover_rate)
 
     def _massive_mutation(self): 
         for position, individual in enumerate(self.population):
-            if position < self.elite: continue
+            if position < self.elitism: continue
             individual.mutate(rate=self.crossover_rate)
 
     def _show_info(self):
-        print('='*20)
-        print(f'Generation: {self.generation}')
-        print(f'Result: {self.winner.score}')
-        print(f'X: {self.winner.x}')
-        print(f'Y: {self.winner.y}')
-        print(f'Chromossome_x: {str(self.winner.chromossome_x)}')
-        print(f'Chromossome_y: {str(self.winner.chromossome_y)}')
-        print('='*20)
+        print('Generation {}'.format(self.generation))
+        print('Variables {}'.format(self.winner.show_chromossomes()))
+        print('Score {}'.format(self.winner.score))
+        print()
+        
