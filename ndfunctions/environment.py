@@ -9,9 +9,9 @@ class Environment:
         self.ranges = ranges
 
         self.population_size = kwargs.get('population_size', 150)
+        self.max_generations = kwargs.get('max_generations', 200)
         self.crossover_rate = kwargs.get('crossover_rate', 1)
         self.mutation_rate = kwargs.get('mutation_rate', 0.01)
-        self.max_generations = kwargs.get('max_generations', 200)
         self.mode = kwargs.get('mode', 'Min')
         self.elitism = kwargs.get('elitism', 2)
 
@@ -55,7 +55,7 @@ class Environment:
     def _massive_mutation(self): 
         for position, individual in enumerate(self.population):
             if position < self.elitism: continue
-            individual.mutate(rate=self.crossover_rate)
+            individual.mutate(rate=self.mutation_rate)
 
     def _show_info(self):
         print('Generation {}'.format(self.generation))
