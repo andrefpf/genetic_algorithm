@@ -12,10 +12,10 @@ class Environment:
         self.max_generations = kwargs.get('max_generations', 200)
         self.crossover_rate = kwargs.get('crossover_rate', 1)
         self.mutation_rate = kwargs.get('mutation_rate', 0.01)
-        self.mode = kwargs.get('mode', 'Min')
+        self.mode = kwargs.get('mode', 'min')
         self.elitism = kwargs.get('elitism', 2)
 
-        self.tragetory_score = []
+        self.log = {'generations':[], 'variables':[], 'scores':[], 'winners':[]}
         self.generation = 0
         self.population = self.create_population()
         self.winner = None
@@ -31,7 +31,7 @@ class Environment:
             self.winner = self.population[0]
             self._massive_crossover()
             self._massive_mutation()
-            self._show_info()
+            self._append_log()
             self.generation += 1
 
     def _should_continue(self):
@@ -42,7 +42,7 @@ class Environment:
             individual.evaluate(self.math_function)
 
     def _set_mode(self):
-        if self.mode == 'Max':
+        if self.mode == 'max':
             self.population = self.population[::-1]
 
     def _massive_crossover(self):
@@ -57,9 +57,8 @@ class Environment:
             if position < self.elitism: continue
             individual.mutate(rate=self.mutation_rate)
 
-    def _show_info(self):
-        print('Generation {}'.format(self.generation))
-        print('Variables {}'.format(self.winner.show_chromossomes()))
-        print('Score {}'.format(self.winner.score))
-        print()
+    def _append_log(self):
+        self.log['generations'].append(self.generation)
+        self.log['variables'].append(self.generation)
+        self.log['scores'].append(self.winner.score)
         
