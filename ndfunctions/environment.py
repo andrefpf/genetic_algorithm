@@ -15,7 +15,7 @@ class Environment:
         self.mode = kwargs.get('mode', 'min')
         self.elitism = kwargs.get('elitism', 2)
 
-        self.log = {'generations':[], 'variables':[], 'scores':[], 'winners':[]}
+        self.log = {'generations':[], 'variables':[], 'scores':[]}
         self.generation = 0
         self.population = self.create_population()
         self.winner = None
