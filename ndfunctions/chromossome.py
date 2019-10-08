@@ -4,7 +4,7 @@ class Chromossome:
     def __init__(self, name, interval):
         self.name = name
         self.interval = interval
-        self.length = 23
+        self.length = 10
         self.alleles = (0, 1)
         self.genes = self.create_genes()
 
