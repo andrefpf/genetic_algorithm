@@ -9,6 +9,10 @@ class Individual:
         self.intervals = intervals
         self.chromossomes = self.__create_chromossomes()
 
+    @property
+    def parameters(self):
+        return {chromossome.name:chromossome.value for chromossome in self.chromossomes}
+
     def __create_chromossomes(self):
         chromossomes = []
         for name, interval in zip(self.variables, self.intervals):
@@ -26,8 +30,7 @@ class Individual:
             chromossome.mutate()
     
     def evaluate(self, math_function):
-        values = {chromossome.name:chromossome.value for chromossome in self.chromossomes}
-        self.score = math_function(values)
+        self.score = math_function(self.parameters)
 
     def show_chromossomes(self):
         chromossomes = dict()

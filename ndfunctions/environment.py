@@ -32,6 +32,7 @@ class Environment:
             self._massive_crossover()
             self._massive_mutation()
             self._append_log()
+            self._print_log()
             self.generation += 1
 
     def _should_continue(self):
@@ -62,3 +63,8 @@ class Environment:
         self.log['variables'].append(self.generation)
         self.log['scores'].append(self.winner.score)
         
+    def _print_log(self):
+        print('Generation:', self.generation)
+        print('Variables:', self.winner.parameters)
+        print('Scores:', self.winner.score)
+        print()
