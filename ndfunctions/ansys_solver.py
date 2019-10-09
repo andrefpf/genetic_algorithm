@@ -1,6 +1,8 @@
 import os
 import time 
 from environment import Environment
+import matplotlib.pyplot as plt
+import random
 
 def write_file(var):
     output_text = open('C:\TESTES_GA\\entrada.txt', 'w+')
@@ -24,13 +26,22 @@ def math_function(var):
     print('HEIGHT{:14.7E}'.format(var['height']))
     print('RESULT:{:14.7E}'.format(answer))
     return answer
+    # return random.randint(0, 10)
+
+def plot_results():
+    for generation in env.generation_log:
+        print(generation)
+        plt.plot(range(env.population_size), generation)
+    plt.show()
 
 start = time.time()
 
 var = ['height', 'width']
 interval = [(1, 15), (7, 25)]
-env = Environment(math_function, var, interval, population_size=10, max_generations=1)
+env = Environment(math_function, var, interval, population_size=3, max_generations=5, elitism=1)
 env.start()
+
+plot_results()
 
 end = time.time()
 print('TIME:', end-start)

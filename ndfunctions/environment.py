@@ -15,7 +15,9 @@ class Environment:
         self.mode = kwargs.get('mode', 'min')
         self.elitism = kwargs.get('elitism', 2)
 
-        self.log = {'generations':[], 'variables':[], 'scores':[]}
+        self.winners_log = []
+        self.generation_log = []
+
         self.generation = 0
         self.population = self.create_population()
         self.winner = None
@@ -31,7 +33,8 @@ class Environment:
             self.winner = self.population[0]
             self._massive_crossover()
             self._massive_mutation()
-            self._append_log()
+            self.push_winners_log()
+            self.push_generation_log()
             self._print_log()
             self.generation += 1
 
@@ -39,7 +42,9 @@ class Environment:
         return self.generation < self.max_generations
 
     def _massive_evaluation(self):
-        for individual in self.population:
+        for position, individual in enumerate(self.population):
+            if position < self.elitism and self.generation > 0:
+                continue
             individual.evaluate(self.math_function)
 
     def _set_mode(self):
@@ -49,19 +54,22 @@ class Environment:
     def _massive_crossover(self):
         population = self.population.copy()
         for position, individual in enumerate(self.population):
-            if position < self.elitism: continue
+            if position < self.elitism: 
+                continue
             other = random.choice(population)
             individual.crossover(other, rate=self.crossover_rate)
 
     def _massive_mutation(self): 
         for position, individual in enumerate(self.population):
-            if position < self.elitism: continue
+            if position < self.elitism: 
+                continue
             individual.mutate(rate=self.mutation_rate)
+    
+    def push_winners_log(self):
+        self.winners_log.append(self.winner)
 
-    def _append_log(self):
-        self.log['generations'].append(self.generation)
-        self.log['variables'].append(self.generation)
-        self.log['scores'].append(self.winner.score)
+    def push_generation_log(self):
+        self.generation_log.append([i.score for i in self.population])
         
     def _print_log(self):
         print('Generation:', self.generation)
