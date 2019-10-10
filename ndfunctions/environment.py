@@ -21,6 +21,7 @@ class Environment:
         self.generation = 0
         self.population = self.create_population()
         self.winner = None
+        self._population_to_evaluate = self.population
     
     def create_population(self):
         return [Individual(self.variables, self.ranges) for i in range(self.population_size)]
@@ -42,10 +43,9 @@ class Environment:
         return self.generation < self.max_generations
 
     def _massive_evaluation(self):
-        for position, individual in enumerate(self.population):
-            if position < self.elitism and self.generation > 0:
-                continue
+        for individual in self._population_to_evaluate:
             individual.evaluate(self.math_function)
+        self._population_to_evaluate = []
 
     def _set_mode(self):
         if self.mode == 'max':
@@ -58,12 +58,14 @@ class Environment:
                 continue
             other = random.choice(population)
             individual.crossover(other, rate=self.crossover_rate)
+            self._population_to_evaluate.append(individual)
 
     def _massive_mutation(self): 
         for position, individual in enumerate(self.population):
             if position < self.elitism: 
                 continue
             individual.mutate(rate=self.mutation_rate)
+            self._population_to_evaluate.append(individual)
     
     def push_winners_log(self):
         self.winners_log.append(self.winner)

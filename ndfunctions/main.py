@@ -8,7 +8,7 @@ def math_function(var):
 def write_file():
     txt = open('results.txt', 'w+')
     
-    for value in env.log['scores']:
+    for value in env.winners_log['scores']:
         txt.write('{:.5f} \n'.format(value))
 
 
