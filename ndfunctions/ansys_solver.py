@@ -34,14 +34,15 @@ def plot_results():
         plt.plot(range(env.population_size), generation)
     plt.show()
 
-start = time.time()
+if __name__ == '__main__':
+    start = time.time()
 
-var = ['height', 'width']
-interval = [(1, 15), (7, 25)]
-env = Environment(math_function, var, interval, population_size=3, max_generations=5, elitism=1)
-env.start()
+    var = ['height', 'width']
+    interval = [(1, 15), (7, 25)]
+    env = Environment(math_function, var, interval, population_size=3, max_generations=5, elitism=1)
+    env.start()
 
-plot_results()
+    plot_results()
 
-end = time.time()
-print('TIME:', end-start)
+    end = time.time()
+    print('TIME:', end-start)
